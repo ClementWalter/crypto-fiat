@@ -29,10 +29,7 @@ const updateDOM = (rate) => {
 };
 
 function updatePrice() {
-  chrome.storage.sync.get("BTCUSDT", (result) => {
-    updateDOM(result);
-  });
+  chrome.storage.sync.get("BTCUSDT", updateDOM);
 }
 
-// setup refresh
-window.setInterval(updatePrice, 1000);
+window.onload = updatePrice;

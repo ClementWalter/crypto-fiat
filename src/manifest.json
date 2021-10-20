@@ -34,7 +34,8 @@
   "permissions": [
     "webNavigation",
     "alarms",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "https://api.binance.com/*"
