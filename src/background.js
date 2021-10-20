@@ -24,7 +24,3 @@ chrome.runtime.onInstalled.addListener(async () => {
   await fetchAvgPrice();
   chrome.alarms.create(ALARM.fetchAvgPrice, { periodInMinutes: 1 });
 });
-
-chrome.webNavigation.onCompleted.addListener(async () => {
-  chrome.storage.sync.get(["BTCUSDT"]);
-});
