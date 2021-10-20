@@ -1,7 +1,30 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "sampleContextMenu",
-    title: "Sample Context Menu",
-    contexts: ["selection"],
+// constants
+const BINANCE_API_ROUTE = "https://api.binance.com/api/v3/avgPrice";
+const ALARM = {
+  fetchAvgPrice: "fetchAvgPrice",
+};
+
+// utils
+async function fetchAvgPrice(symbol = "BTCUSDT") {
+  const response = await fetch(`${BINANCE_API_ROUTE}?symbol=${symbol}`);
+  const avgPrice = await response.json();
+  chrome.storage.sync.set({ [symbol]: avgPrice.price }, () => {
+    console.log(`Value for ${symbol} is set to ${avgPrice.price}`);
   });
+}
+
+// chrome APIs
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === ALARM.fetchAvgPrice) {
+    await fetchAvgPrice();
+  }
+});
+
+chrome.runtime.onInstalled.addListener(async () => {
+  await fetchAvgPrice();
+  chrome.alarms.create(ALARM.fetchAvgPrice, { periodInMinutes: 1 });
+});
+
+chrome.webNavigation.onCompleted.addListener(async () => {
+  chrome.storage.sync.get(["BTCUSDT"]);
 });
