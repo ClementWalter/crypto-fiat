@@ -27,7 +27,11 @@ const updateDOM = (rate) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const node of Array.from(element.childNodes)) {
       if (node.nodeType === node.TEXT_NODE) {
-        node.textContent = updateContent(rate)(node.textContent);
+        const newContent = updateContent(rate)(node.textContent);
+        if (node.textContent !== newContent) {
+          console.log(`Update price from ${node.textContent} to ${newContent}`);
+          node.textContent = newContent;
+        }
       }
     }
   }
