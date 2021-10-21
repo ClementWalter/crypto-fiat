@@ -28,3 +28,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   await fetchAvgPrice();
   chrome.alarms.create(ALARM.fetchAvgPrice, { periodInMinutes: 1 });
 });
+
+chrome.tabs.onUpdated.addListener((tabId) => {
+  chrome.tabs.sendMessage(tabId, "refreshPrices");
+});

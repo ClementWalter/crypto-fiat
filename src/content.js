@@ -1,5 +1,5 @@
 // constants
-const NUMBER_REGEX = /(\d+[\d\s]*[.,]?[\de-]*)/;
+const NUMBER_REGEX = /(\d+[\d\s,]*\.?[\de-]*)/;
 const CURRENCY_REGEX =
   /[$\xA2-\xA5\u058F\u060B\u09F2\u09F3\u09FB\u0AF1\u0BF9\u0E3F\u17DB\u20A0-\u20BD\uA838\uFDFC\uFE69\uFF04\uFFE0\uFFE1\uFFE5\uFFE6]/;
 const PRICE_REGEX = `(${CURRENCY_REGEX.source}${NUMBER_REGEX.source})|(${NUMBER_REGEX.source}${CURRENCY_REGEX.source})`;
@@ -10,7 +10,7 @@ const updateContent = (rate) => (textContent) =>
     .map((price) => [
       price[0],
       `${
-        parseFloat(price[0].match(NUMBER_REGEX)[0].replace(" ", "")) /
+        parseFloat(price[0].match(NUMBER_REGEX)[0].replace(/\s|,/g, "")) /
         rate.BTCUSDT
       } BTC`,
     ])
@@ -38,3 +38,10 @@ function updatePrice() {
 }
 
 window.onload = updatePrice;
+
+// chrome APIs
+chrome.runtime.onMessage.addListener((request) => {
+  if (request === "refreshPrices") {
+    updatePrice();
+  }
+});
