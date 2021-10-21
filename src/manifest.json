@@ -32,7 +32,6 @@
     }
   ],
   "permissions": [
-    "webNavigation",
     "alarms",
     "storage",
     "tabs"
