@@ -1,6 +1,27 @@
 import { NUMBER_REGEX } from "./constants";
 
-test("NUMBER_REGEX", () => {
-  const number = "A price 2134.342 in a string".match(NUMBER_REGEX)[0];
-  expect(number).toEqual("2134.342");
+describe("NUMBER_REGEX", () => {
+  it.each`
+    template                 | match
+    ${"From 4999 only"}      | ${"4999"}
+    ${"From $4999 only"}     | ${"4999"}
+    ${"From 4999$ only"}     | ${"4999"}
+    ${"From 4,999 only"}     | ${"4,999"}
+    ${"From $4,999 only"}    | ${"4,999"}
+    ${"From 4.999$ only"}    | ${"4.999"}
+    ${"From 4 999 only"}     | ${"4 999"}
+    ${"From $4 999 only"}    | ${"4 999"}
+    ${"From 4 999$ only"}    | ${"4 999"}
+    ${"From 4999.50 only"}   | ${"4999.50"}
+    ${"From $4999.50 only"}  | ${"4999.50"}
+    ${"From 4999.50$ only"}  | ${"4999.50"}
+    ${"From 4,999.50 only"}  | ${"4,999.50"}
+    ${"From $4,999.50 only"} | ${"4,999.50"}
+    ${"From 4.999.50$ only"} | ${"4.999.50"}
+    ${"From 4 999.50 only"}  | ${"4 999.50"}
+    ${"From $4 999.50 only"} | ${"4 999.50"}
+    ${"From 4 999.50$ only"} | ${"4 999.50"}
+  `("should match a single number", ({ template, match }) => {
+    expect(template.match(NUMBER_REGEX)[0]).toEqual(match);
+  });
 });
