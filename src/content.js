@@ -24,16 +24,11 @@ const updateDOM = (rate) => {
   const allElements = document.getElementsByTagName("*");
   for (let i = 0; i < allElements.length; i += 1) {
     const element = allElements[i];
-    try {
-      if (!element.childElementCount) {
-        const { textContent } = element;
-        if (textContent) {
-          element.textContent = updateContent(rate)(textContent);
-        }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const node of Array.from(element.childNodes)) {
+      if (node.nodeType === node.TEXT_NODE) {
+        node.textContent = updateContent(rate)(node.textContent);
       }
-    } catch (e) {
-      console.log(e);
-      console.log(element);
     }
   }
 };
