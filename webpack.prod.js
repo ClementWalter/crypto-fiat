@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // noinspection JSCheckFunctionSignatures
 
 const { merge } = require("webpack-merge");

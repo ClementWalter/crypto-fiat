@@ -12,15 +12,13 @@
     "start": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^9.0.1",
     "html-webpack-plugin": "^5.4.0",
     "webpack-merge": "^5.8.0",
     "webpack-sources": "^3.2.1",
-    "zip-webpack-plugin": "^4.0.1"
-  },
-  "devDependencies": {
+    "zip-webpack-plugin": "^4.0.1",
     "@babel/core": "^7.15.8",
     "@babel/eslint-parser": "^7.15.8",
     "babel-plugin-module-resolver": "^4.1.0",
