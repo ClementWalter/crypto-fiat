@@ -43,6 +43,10 @@ function updatePrice() {
 
 window.onload = updatePrice;
 
+for (let sec = 0; sec < 4; sec += 1) {
+  window.setTimeout(updatePrice, 1000 * sec);
+}
+
 // chrome APIs
 chrome.runtime.onMessage.addListener((request) => {
   if (request === "refreshPrices") {
