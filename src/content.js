@@ -1,19 +1,18 @@
-import { PRICE_REGEX, NUMBER_REGEX } from "./constants";
-import { parseNumber } from "./utils";
+import { PRICE_REGEX } from "./constants";
+import { parsePrice } from "./utils";
 
 // utils
 const updateContent = (rate) => (textContent) =>
   Array.from(textContent.matchAll(PRICE_REGEX))
-    .map((price) => [
-      price[0],
-      `${parseNumber(price[0].match(NUMBER_REGEX)[0]) / rate.BTCUSDT} BTC`,
-    ])
+    .map((match) => match[0])
+    .map(parsePrice(rate))
     .reduce(
       (previousValue, currentValue) =>
         previousValue.replace(currentValue[0], currentValue[1]),
       textContent
     );
 
+// noinspection JSValidateTypes
 const updateDOM = (rate) => {
   const allElements = document.getElementsByTagName("*");
   for (let i = 0; i < allElements.length; i += 1) {
@@ -23,6 +22,7 @@ const updateDOM = (rate) => {
       if (node.nodeType === node.TEXT_NODE) {
         const newContent = updateContent(rate)(node.textContent);
         if (node.textContent !== newContent) {
+          // noinspection JSValidateTypes
           node.textContent = newContent;
         }
       }
@@ -33,7 +33,7 @@ const updateDOM = (rate) => {
 function updatePrice() {
   for (let second = 0; second < 3; second += 1) {
     window.setTimeout(
-      () => chrome.storage.sync.get("BTCUSDT", updateDOM),
+      () => chrome.storage.sync.get(null, updateDOM),
       1000 * second
     );
   }

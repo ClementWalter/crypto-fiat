@@ -1,13 +1,14 @@
 import consola from "consola";
+import _ from "lodash";
 import { ALARM } from "./constants";
 import { fetchPrices } from "./utils";
 
 // chrome APIs
 async function fetchAvgPrice() {
   const prices = await fetchPrices();
-  const { BTCUSDT: rate } = prices;
-  chrome.storage.sync.set({ BTCUSDT: rate }, () => {
-    consola.log("Rates updated");
+  const rates = _.pick(prices, ["BTCUSDT", "BTCEUR"]);
+  chrome.storage.sync.set(rates, () => {
+    consola.log("Rates updated", rates);
   });
 }
 

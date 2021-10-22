@@ -1,4 +1,4 @@
-import { NUMBER_REGEX, PRICE_REGEX, CURRENCY_REGEX } from "./constants";
+import { NUMBER_REGEX, PRICE_REGEX, SYMBOL_REGEX } from "./constants";
 
 describe("Regex", () => {
   it.each`
@@ -41,17 +41,18 @@ describe("Regex", () => {
     ${"From 4 999,50€ only"} | ${"4 999,50"} | ${"4 999,50€"} | ${"€"}
     ${"From € only"}         | ${null}       | ${null}        | ${"€"}
     ${"1 159 €"}             | ${"1 159"}    | ${"1 159 €"}   | ${"€"}
+    ${"$5"}                  | ${"5"}        | ${"$5"}        | ${"$"}
   `(
     "should match number '$matchNumber', currency '$matchCurrency' and price '$matchPrice'",
     ({ template, matchNumber, matchPrice, matchCurrency }) => {
       let number = template.match(NUMBER_REGEX);
-      number = number ? number[0] : number;
+      number = number ? number[0].trim() : number;
       expect(number).toEqual(matchNumber);
       let price = template.match(PRICE_REGEX);
-      price = price ? price[0] : price;
+      price = price ? price[0].trim() : price;
       expect(price).toEqual(matchPrice);
-      let currency = template.match(CURRENCY_REGEX);
-      currency = currency ? currency[0] : currency;
+      let currency = template.match(SYMBOL_REGEX);
+      currency = currency ? currency[0].trim() : currency;
       expect(currency).toEqual(matchCurrency);
     }
   );

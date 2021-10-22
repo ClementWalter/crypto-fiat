@@ -1,7 +1,13 @@
-import { BINANCE_API_ROUTE } from "./constants";
+import consola from "consola";
+import _ from "lodash";
+import currencyToSymbolMap from "currency-symbol-map/map";
+import { BINANCE_API_ROUTE, SYMBOL_REGEX, NUMBER_REGEX } from "./constants";
 
-const parseNumber = (textContent) => {
-  const parts = textContent.replace(/[\s,]/g, ".").split(".");
+const parseNumber = (price) => {
+  let number = price.match(NUMBER_REGEX);
+  if (!number) return NaN;
+  number = number[0].trim();
+  const parts = number.replace(/[\s,]/g, ".").split(".");
   if (parts.length === 1) {
     return parseFloat(parts[0]);
   }
@@ -11,6 +17,25 @@ const parseNumber = (textContent) => {
     decimals = "0";
   }
   return parseFloat(`${parts.join("")}.${decimals}`);
+};
+
+const parseSymbol = (price) => {
+  let symbol = price.match(SYMBOL_REGEX);
+  if (!symbol) return undefined;
+  symbol = symbol[0].trim();
+  const currency = _.invert(currencyToSymbolMap)[symbol];
+  return symbol === "$" ? "USDT" : currency;
+};
+
+const parsePrice = (rate) => (price) => {
+  const symbol = parseSymbol(price);
+  const number = parseNumber(price);
+
+  consola.log(
+    `Parsing price ${price} with symbol ${symbol} and number ${number}\nrate is`,
+    rate
+  );
+  return [price, `${number / rate[`BTC${symbol}`]} BTC`];
 };
 
 const fetchPrices = async () => {
@@ -24,4 +49,4 @@ const fetchPrices = async () => {
   );
 };
 
-export { parseNumber, fetchPrices };
+export { parseNumber, parseSymbol, parsePrice, fetchPrices };
