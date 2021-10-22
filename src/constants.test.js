@@ -22,8 +22,27 @@ describe("Regex", () => {
     ${"From $4 999.50 only"} | ${"4 999.50"} | ${"$4 999.50"} | ${"$"}
     ${"From 4 999.50$ only"} | ${"4 999.50"} | ${"4 999.50$"} | ${"$"}
     ${"From $ only"}         | ${null}       | ${null}        | ${"$"}
+    ${"From €4999 only"}     | ${"4999"}     | ${"€4999"}     | ${"€"}
+    ${"From 4999€ only"}     | ${"4999"}     | ${"4999€"}     | ${"€"}
+    ${"From 4.999 only"}     | ${"4.999"}    | ${null}        | ${null}
+    ${"From €4.999 only"}    | ${"4.999"}    | ${"€4.999"}    | ${"€"}
+    ${"From 4.999€ only"}    | ${"4.999"}    | ${"4.999€"}    | ${"€"}
+    ${"From 4 999 only"}     | ${"4 999"}    | ${null}        | ${null}
+    ${"From €4 999 only"}    | ${"4 999"}    | ${"€4 999"}    | ${"€"}
+    ${"From 4 999€ only"}    | ${"4 999"}    | ${"4 999€"}    | ${"€"}
+    ${"From 4999,50 only"}   | ${"4999,50"}  | ${null}        | ${null}
+    ${"From €4999,50 only"}  | ${"4999,50"}  | ${"€4999,50"}  | ${"€"}
+    ${"From 4999,50€ only"}  | ${"4999,50"}  | ${"4999,50€"}  | ${"€"}
+    ${"From 4.999,50 only"}  | ${"4.999,50"} | ${null}        | ${null}
+    ${"From €4.999,50 only"} | ${"4.999,50"} | ${"€4.999,50"} | ${"€"}
+    ${"From 4.999,50€ only"} | ${"4.999,50"} | ${"4.999,50€"} | ${"€"}
+    ${"From 4 999,50 only"}  | ${"4 999,50"} | ${null}        | ${null}
+    ${"From €4 999,50 only"} | ${"4 999,50"} | ${"€4 999,50"} | ${"€"}
+    ${"From 4 999,50€ only"} | ${"4 999,50"} | ${"4 999,50€"} | ${"€"}
+    ${"From € only"}         | ${null}       | ${null}        | ${"€"}
+    ${"1 159 €"}             | ${"1 159"}    | ${"1 159 €"}   | ${"€"}
   `(
-    "should match number, currency and price",
+    "should match number '$matchNumber', currency '$matchCurrency' and price '$matchPrice'",
     ({ template, matchNumber, matchPrice, matchCurrency }) => {
       let number = template.match(NUMBER_REGEX);
       number = number ? number[0] : number;
