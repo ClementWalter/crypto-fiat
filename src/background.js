@@ -1,23 +1,16 @@
-// constants
-const BINANCE_API_ROUTE = "https://api.binance.com/api/v3/avgPrice";
-const ALARM = {
-  fetchAvgPrice: "fetchAvgPrice",
-};
-
-// utils
-async function fetchAvgPrice(symbol = "BTCUSDT") {
-  try {
-    const response = await fetch(`${BINANCE_API_ROUTE}?symbol=${symbol}`);
-    const avgPrice = await response.json();
-    chrome.storage.sync.set({ [symbol]: avgPrice.price }, () => {
-      console.log(`Value for ${symbol} is set to ${avgPrice.price}`);
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
+import consola from "consola";
+import { ALARM } from "./constants";
+import { fetchPrices } from "./utils";
 
 // chrome APIs
+async function fetchAvgPrice() {
+  const prices = await fetchPrices();
+  const { BTCUSDT: rate } = prices;
+  chrome.storage.sync.set({ BTCUSDT: rate }, () => {
+    consola.log("Rates updated");
+  });
+}
+
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === ALARM.fetchAvgPrice) {
     await fetchAvgPrice();

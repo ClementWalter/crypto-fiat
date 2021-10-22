@@ -1,4 +1,4 @@
-import { parseNumber } from "./utils";
+import { fetchPrices, parseNumber } from "./utils";
 
 describe("parseNumber", () => {
   it.each`
@@ -16,5 +16,13 @@ describe("parseNumber", () => {
     ${"1 159 €"}  | ${4999.5}
   `("should parse '$template' to '$number'", ({ template, number }) => {
     expect(parseNumber(template)).toEqual(number);
+  });
+});
+
+describe("fetchPrice", () => {
+  it("should return a object symbol: value", async () => {
+    const rates = await fetchPrices();
+    expect(rates).toHaveProperty("BTCUSDT");
+    expect(typeof rates.BTCUSDT).toBe("number");
   });
 });
