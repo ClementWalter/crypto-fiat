@@ -18,6 +18,11 @@ describe("parseNumber", () => {
     ${"1 159k€"}  | ${1159000}
     ${"$1 159k"}  | ${1159000}
     ${"$5k"}      | ${5000}
+    ${"$25B"}     | ${25e9}
+    ${"29.10€"}   | ${29.1}
+    ${"$5M"}      | ${5e6}
+    ${"$25m"}     | ${25e6}
+    ${"29.10M€"}  | ${29.1e6}
   `("should parse '$template' to '$number'", ({ template, number }) => {
     expect(parseNumber(template)).toEqual(number);
   });
@@ -38,6 +43,7 @@ describe("parsePrice", () => {
     ${"€5  "}    | ${{ BTCEUR: 5 }}  | ${"1 BTC  "}
     ${" 5€ "}    | ${{ BTCEUR: 5 }}  | ${" 1 BTC "}
     ${" 17.17€"} | ${{ BTCEUR: 5 }}  | ${" 3.434 BTC"}
+    ${"29.10€"}  | ${{ BTCEUR: 5 }}  | ${"5.82 BTC"}
   `(
     "should convert '$template' with '$rate'' to '$finalPrice'",
     ({ template, rate, finalPrice }) => {

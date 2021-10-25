@@ -6,12 +6,24 @@ import { BINANCE_API_ROUTE, NUMBER_REGEX, SYMBOL_REGEX } from "./constants";
 const parseNumber = (price) => {
   let number = price.match(NUMBER_REGEX);
   if (!number) return NaN;
-  number = number[0].trim();
+  number = number[0].trim().toLowerCase();
 
   let factor = 1;
   if (number.includes("k")) {
     number = number.replace("k", "");
-    factor = 1000;
+    factor = 1e3;
+  }
+  if (number.includes("m")) {
+    number = number.replace("m", "");
+    factor = 1e6;
+  }
+  if (number.includes("b")) {
+    number = number.replace("b", "");
+    factor = 1e9;
+  }
+  if (number.includes("bn")) {
+    number = number.replace("bn", "");
+    factor = 1e9;
   }
   const parts = number.replace(/[\s,]/g, ".").split(".");
   let decimals = 0;

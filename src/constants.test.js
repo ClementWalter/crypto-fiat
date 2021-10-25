@@ -43,6 +43,8 @@ describe("Regex", () => {
     ${"From 4999,50k only"}   | ${"4999,50k"}  | ${null}         | ${null}
     ${"From €4999,50k only"}  | ${"4999,50k"}  | ${"€4999,50k"}  | ${"€"}
     ${"From 4999,50 k€ only"} | ${"4999,50 k"} | ${"4999,50 k€"} | ${"€"}
+    ${"From $25B only"}       | ${"25B"}       | ${"$25B"}       | ${"$"}
+    ${"29.10€"}               | ${"29.10"}     | ${"29.10€"}     | ${"€"}
   `(
     "should match number '$matchNumber', currency '$matchCurrency' and price '$matchPrice'",
     ({ template, matchNumber, matchPrice, matchCurrency }) => {
