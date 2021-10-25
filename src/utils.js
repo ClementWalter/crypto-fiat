@@ -30,12 +30,19 @@ const parseSymbol = (price) => {
 const parsePrice = (rate) => (price) => {
   const symbol = parseSymbol(price);
   const number = parseNumber(price);
+  const trailingSpaces = price.length - price.trimEnd().length;
+  const startingSpaces = price.length - price.trimStart().length;
 
   consola.log(
     `Parsing price ${price} with symbol ${symbol} and number ${number}\nrate is`,
     rate
   );
-  return [price, `${number / rate[`BTC${symbol}`]} BTC`];
+  return [
+    price,
+    `${" ".repeat(startingSpaces)}${
+      number / rate[`BTC${symbol}`]
+    } BTC${" ".repeat(trailingSpaces)}`,
+  ];
 };
 
 const fetchPrices = async () => {

@@ -27,12 +27,12 @@ describe("parseSymbol", () => {
 
 describe("parsePrice", () => {
   it.each`
-    template    | rate              | finalPrice
-    ${"$5"}     | ${{ BTCUSDT: 2 }} | ${"2.5 BTC"}
-    ${"5$"}     | ${{ BTCUSDT: 2 }} | ${"2.5 BTC"}
-    ${"€5"}     | ${{ BTCEUR: 5 }}  | ${"1 BTC"}
-    ${"5€"}     | ${{ BTCEUR: 5 }}  | ${"1 BTC"}
-    ${"17.17€"} | ${{ BTCEUR: 5 }}  | ${"3.434 BTC"}
+    template     | rate              | finalPrice
+    ${"$5"}      | ${{ BTCUSDT: 2 }} | ${"2.5 BTC"}
+    ${"5$"}      | ${{ BTCUSDT: 2 }} | ${"2.5 BTC"}
+    ${"€5  "}    | ${{ BTCEUR: 5 }}  | ${"1 BTC  "}
+    ${" 5€ "}    | ${{ BTCEUR: 5 }}  | ${" 1 BTC "}
+    ${" 17.17€"} | ${{ BTCEUR: 5 }}  | ${" 3.434 BTC"}
   `(
     "should convert '$template' with '$rate'' to '$finalPrice'",
     ({ template, rate, finalPrice }) => {
