@@ -39,8 +39,6 @@ function updatePrice() {
   }
 }
 
-window.onload = updatePrice;
-
 // chrome APIs
 chrome.runtime.onMessage.addListener((request) => {
   if (request === "refreshPrices") {
