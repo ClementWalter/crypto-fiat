@@ -1,22 +1,24 @@
 import consola from "consola";
 import _ from "lodash";
 import currencyToSymbolMap from "currency-symbol-map/map";
-import { BINANCE_API_ROUTE, SYMBOL_REGEX, NUMBER_REGEX } from "./constants";
+import { BINANCE_API_ROUTE, NUMBER_REGEX, SYMBOL_REGEX } from "./constants";
 
 const parseNumber = (price) => {
   let number = price.match(NUMBER_REGEX);
   if (!number) return NaN;
   number = number[0].trim();
+
+  let factor = 1;
+  if (number.includes("k")) {
+    number = number.replace("k", "");
+    factor = 1000;
+  }
   const parts = number.replace(/[\s,]/g, ".").split(".");
-  if (parts.length === 1) {
-    return parseFloat(parts[0]);
+  let decimals = 0;
+  if (parts.length > 1 && parts[parts.length - 1].length !== 3) {
+    decimals = parts.pop();
   }
-  let decimals = parts.pop();
-  if (decimals.length === 3) {
-    parts.push(decimals);
-    decimals = "0";
-  }
-  return parseFloat(`${parts.join("")}.${decimals}`);
+  return parseFloat(`${parts.join("")}.${decimals}`) * factor;
 };
 
 const parseSymbol = (price) => {
